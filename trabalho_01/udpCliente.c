@@ -61,10 +61,22 @@ int main(int argc, char *argv[])
                 break;
             }
         }
-
     }
-
 } 
+
+/**
+ * podemos usar a funcao bind(s) e listen,
+ * colocomas
+ * bind()
+ * listen()
+ * accept()
+ * recu()
+ * send()
+ * close  (loopa para accept)
+ *
+
+
+
 
 void error(char *msg) 
 { 

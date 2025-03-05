@@ -128,3 +128,9 @@ int main(int argc, char *argv[])
         }
     } 
 }
+
+
+/**
+ * passar na string o nome de um arquivo, abrir o arquivo no servidor e enviar o conteudo do arquvio para o cliente
+ * tentar rodar em computadores
+ */
