@@ -1,0 +1,50 @@
+1)
+a)
+Roda um comando até ele acabar, mostrando todas as chamadas ao sistema, saidas e valores executados pelo programa até ele acabar
+
+b)
+Executa um determinado programa e calcula o tempo de execução desse programa
+
+2
+a)
+    o comando strafe calculou o tempo de execução de cada chamada do programa
+
+b)
+mprotect : altera permissões de acesso a uma região de memória
+munmap : libera uma região de memória previamente mapeada
+set_tid_address: define o endereço de armazenamento do TID do thread
+set_robust_list: configura a lista de mutexes robustos para recuperação automática
+prlimit64: obtém ou define limites de recursos para um processo
+rseq: suporte para operações de sequência de reinício para otimizar concorrência
+read: lê dados de um descritor de arquivo
+close: fecha um descritor de arquivo
+fstat: obtém informações sobre um arquivo aberto
+mmap : mapeia memória para arquivos ou anônima no espaço do processo
+brk : ajusta o tamanho do heap de um processo
+pread64 : lê dados de um arquivo em um deslocamento específico sem alterar o ponteiro do arquivo
+access : verifica permissões de acesso a um arquivo
+execve : executa um novo programa substituindo o processo atual
+arch_prctl: define ou obtém propriedades específicas da arquitetura para um processo
+openat : abre um arquivo relativo a um diretório específico
+syscall : invoca chamadas de sistema diretamente
+write : escreve dados em um descritor de arquivo
+
+c)
+    não está, visto que estou executando em modo usuário e o sistema operacional restringe acesso a certos recursos do sistema
+
+d)
+    -c: mostra tempo de chamada, tempo medio por chamada, percentual de uso
+    -r: mostra tempo de execução de cada chamada
+
+e)
+    a chamada scall teve um erro em cada execução, todas as execuções usaram o comando mmap para alocar memoria
+
+3)
+a)
+o tempo de execução tem uma certa variação de um segundo
+
+b)
+o tempo de execução é mias constante entre as chamadas e menor em geral, se comparado com o arquivo anterior
+
+c)
+tempo sempre constante e o menor valor entre todas as chamdas

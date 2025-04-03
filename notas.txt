@@ -1,0 +1,50 @@
+introdução a arquiteturas
+    servidores interativos
+
+    servidores concorrentes
+
+
+
+
+
+
+
+
+
+
+
+
+cliente navegador
+
+
+rfc 926
+rfc http    194t
+
+
+rfc http    194t
+rfc http    194t
+
+
+
+
+
+teste:
+    ip:porta
+    ip:porta/index.html
+
+
+
+funcoes
+    agree()
+    recu()
+    send()
+
+
+
+operacao idenpotente
+
+
+
+tarefa
+
+executar
