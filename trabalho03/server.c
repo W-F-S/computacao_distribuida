@@ -8,29 +8,28 @@
 
 #define PORT 8081
 #define BUFFER_SIZE 1024
+#define ARQUIVO_ENVIO "img.hdr"
 
-void *handle_client(void *client_socket_ptr) {
+
+void *conexao_cliente(void *client_socket_ptr) {
     int client_socket = *(int *)client_socket_ptr;
+    const char *file_name = ARQUIVO_ENVIO;
+
     free(client_socket_ptr);
 
     // Enviar mensagem de conexão
-    char *connection_msg = "Conexão estabelecida com o servidor.\n";
+    char *connection_msg = "conexão estabelecida com o servidor.\n";
     send(client_socket, connection_msg, strlen(connection_msg), 0);
-
-    // Nome fixo do arquivo a ser enviado
-    const char *file_name = "img.hdr";
-    printf("Cliente conectado. Enviando arquivo: %s\n", file_name);
 
     FILE *file = fopen(file_name, "rb");
     if (file == NULL) {
-        char *error_msg = "Erro: arquivo teste.txt não encontrado.\n";
+        char *error_msg = "Erro: arquivo não encontrado.\n";
         send(client_socket, error_msg, strlen(error_msg), 0);
         close(client_socket);
         pthread_exit(NULL);
     }
 
-    // Mensagem de início de envio
-    char *start_msg = "Iniciando envio...\n";
+    char *start_msg = "Enviando arquivo:\n";
     send(client_socket, start_msg, strlen(start_msg), 0);
 
     // Enviar o conteúdo do arquivo
@@ -38,14 +37,13 @@ void *handle_client(void *client_socket_ptr) {
     size_t n;
     while ((n = fread(buffer, 1, sizeof(buffer), file)) > 0) {
         if (send(client_socket, buffer, n, 0) < 0) {
-            perror("Erro ao enviar dados do arquivo");
+            perror("Erro ao enviar arquivo");
             break;
         }
     }
     fclose(file);
 
-    // Mensagem final
-    char *success_msg = "\nArquivo enviado com sucesso.\n";
+    char *success_msg = "\n\n\narquivo enviado com sucesso.\n\n\n";
     send(client_socket, success_msg, strlen(success_msg), 0);
 
     close(client_socket);
@@ -63,12 +61,16 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
+    //configurando porta
     server_addr.sin_family = AF_INET;
     server_addr.sin_addr.s_addr = INADDR_ANY;
     server_addr.sin_port = htons(PORT);
 
+
+
     if (bind(server_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
-        perror("Erro ao fazer bind");
+        perror("Erro em bind()\n"); //perror mostra mais informacoes
+
         exit(EXIT_FAILURE);
     }
 
@@ -80,6 +82,7 @@ int main() {
     printf("Servidor ouvindo na porta %d...\n", PORT);
 
     while (1) {
+        //accept espera indefinidamente por um cliente para ser conectado
         client_socket = accept(server_socket, (struct sockaddr *)&client_addr, &client_addr_len);
         if (client_socket < 0) {
             perror("Erro ao aceitar conexão");
@@ -95,7 +98,8 @@ int main() {
         *client_sock_ptr = client_socket;
 
         pthread_t thread_id;
-        if (pthread_create(&thread_id, NULL, handle_client, client_sock_ptr) != 0) {
+        //cria nova thread e atrela a função handle_client para ela
+        if (pthread_create(&thread_id, NULL, conexao_cliente, client_sock_ptr) != 0) {
             perror("Erro ao criar thread");
             free(client_sock_ptr);
             close(client_socket);
