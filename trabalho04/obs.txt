@@ -1,0 +1,3 @@
+servidor precisa desse serviço para funcionar:
+  sudo systemctl start rpcbind
+
