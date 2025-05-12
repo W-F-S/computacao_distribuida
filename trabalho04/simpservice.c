@@ -1,68 +1,18 @@
-/* Definition of the remote add and subtract procedure used by 
-   simple RPC example 
-   rpcgen will create a template for you that contains much of the code
-   needed in this file is you give it the "-Ss" command line arg.
-*/
+#include "matriz.h"
 #include <stdio.h>
-#include "simp.h"
 
-/* Here is the actual remote procedure */
-/* The return value of this procedure must be a pointer to int! */
-/* we declare the variable result as static so we can return a 
-   pointer to it */
+matriz *multiplicar_matrizes_1_svc(matrizes *entrada, struct svc_req *req) {
+    static matriz resultado;
+    int i, j, k;
 
-int *
-add_1_svc(operands *argp, struct svc_req *rqstp)
-{
-	static int  result;
+    for (i = 0; i < TAM; i++) {
+        for (j = 0; j < TAM; j++) {
+            resultado.dados[i][j] = 0;
+            for (k = 0; k < TAM; k++) {
+                resultado.dados[i][j] += entrada->m1.dados[i][k] * entrada->m2.dados[k][j];
+            }
+        }
+    }
 
-	printf("Got request: adding %d, %d\n",
-	       argp->x, argp->y);
-
-	result = argp->x + argp->y;
-
-
-	return (&result);
+    return &resultado;
 }
-
-int *
-sub_1_svc(operands *argp, struct svc_req *rqstp)
-{
-	static int  result;
-
-	printf("Got request: subtracting %d, %d\n",
-	       argp->x, argp->y);
-
-	result = argp->x - argp->y;
-
-
-	return (&result);
-}
-
-int *
-mult_1_svc(operands *argp, struct svc_req *rqstp)
-{
-	static int  result;
-
-	printf("Got request: multiplicando %d, %d\n",
-	       argp->x, argp->y);
-
-	result = argp->x * argp->y;
-
-
-	return (&result);
-}
-
-float *
-div_1_svc(operands *argp, struct svc_req *rqstp)
-{
-	static float  result;
-
-	printf("Got request: dividindo %d, %d\n",
-	       argp->x, argp->y);
-
-	result = (double)argp->x / (double)argp->y;
-
-	return (&result);
-}
-

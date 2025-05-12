@@ -4,7 +4,7 @@ SERVER = server
 
 # Fontes
 RPCGEN = rpcgen
-RPCFILE = matriz.x
+RPCFILE = simp.x
 CLIENT_SRC = simp_clnt.c simp_xdr.c simpclient.c
 SERVER_SRC = simp_svc.c simp_xdr.c simpservice.c
 

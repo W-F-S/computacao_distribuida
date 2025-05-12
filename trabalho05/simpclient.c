@@ -62,7 +62,7 @@ int mult( CLIENT *clnt, int x, int y) {
 
 /* Wrapper function takes care of calling the RPC procedure */
 
-int divi( CLIENT *clnt, int x, int y) {
+float divi( CLIENT *clnt, int x, int y) {
   operands ops;
   float *result;
 
@@ -108,10 +108,7 @@ int main( int argc, char *argv[]) {
   printf("%d - %d = %d\n",x,y, sub(clnt,x,y));
 
   printf("%d * %d = %d\n",x,y, mult(clnt,x,y));
-  printf("%d / %d = %d\n",x,y, divi(clnt,x,y));
+  printf("%d / %d = %f\n",x,y, divi(clnt,x,y));
 
   return(0);
 }
-
-
-

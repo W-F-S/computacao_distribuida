@@ -1,4 +1,4 @@
 servidor precisa desse serviço para funcionar:
   sudo systemctl start rpcbind
 
-esses arquivos apenas multiplicam e dividem dois inteiros
+cuida da parte de matrizes

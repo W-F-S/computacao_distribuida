@@ -44,7 +44,7 @@ mult_1_svc(operands *argp, struct svc_req *rqstp)
 {
 	static int  result;
 
-	printf("Got request: subtracting %d, %d\n",
+	printf("Got request: multiplicando %d, %d\n",
 	       argp->x, argp->y);
 
 	result = argp->x * argp->y;
@@ -58,11 +58,10 @@ div_1_svc(operands *argp, struct svc_req *rqstp)
 {
 	static float  result;
 
-	printf("Got request: subtracting %d, %d\n",
+	printf("Got request: dividindo %d, %d\n",
 	       argp->x, argp->y);
 
-	result = argp->x / argp->y;
-
+	result = (double)argp->x / (double)argp->y;
 
 	return (&result);
 }

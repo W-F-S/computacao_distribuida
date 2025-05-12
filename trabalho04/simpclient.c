@@ -1,114 +1,43 @@
-/* RPC client for simple addition example */
-
+#include "matriz.h"
 #include <stdio.h>
-#include "simp.h"  /* Created for us by rpcgen - has everything we need ! */
+#include <rpc/rpc.h>
 
-/* Wrapper function takes care of calling the RPC procedure */
+int main() {
+    CLIENT *cliente;
+    matrizes entrada;
+    matriz *resultado;
 
-int add( CLIENT *clnt, int x, int y) {
-  operands ops;
-  int *result;
+    cliente = clnt_create("localhost", PROGRAM_MATRIZ, VERSION_MATRIZ, "udp");
+    if (cliente == NULL) {
+        clnt_pcreateerror("Erro ao criar cliente");
+        return 1;
+    }
 
-  /* Gather everything into a single data structure to send to the server */
-  ops.x = x;
-  ops.y = y;
+    // Matrizes de exemplo 3x3
+    int a[3][3] = {{1, 2, 3},
+                   {4, 5, 6},
+                   {7, 8, 9}};
+    int b[3][3] = {{9, 8, 7},
+                   {6, 5, 4},
+                   {3, 2, 1}};
 
-  /* Call the client stub created by rpcgen */
-  result = add_1(&ops,clnt);
-  if (result==NULL) {
-    fprintf(stderr,"Trouble calling remote procedure\n");
-    exit(0);
-  }
-  return(*result);
-}
+    for (int i = 0; i < TAM; i++) {
+        for (int j = 0; j < TAM; j++) {
+            entrada.m1.dados[i][j] = a[i][j];
+            entrada.m2.dados[i][j] = b[i][j];
+        }
+    }
 
-/* Wrapper function takes care of calling the RPC procedure */
+    resultado = multiplicar_matrizes_1(&entrada, cliente);
 
-int sub( CLIENT *clnt, int x, int y) {
-  operands ops;
-  int *result;
+    printf("Resultado da multiplicação:\n");
+    for (int i = 0; i < TAM; i++) {
+        for (int j = 0; j < TAM; j++) {
+            printf("%d ", resultado->dados[i][j]);
+        }
+        printf("\n");
+    }
 
-  /* Gather everything into a single data structure to send to the server */
-  ops.x = x;
-  ops.y = y;
-
-  /* Call the client stub created by rpcgen */
-  result = sub_1(&ops,clnt);
-  if (result==NULL) {
-    fprintf(stderr,"Trouble calling remote procedure\n");
-    exit(0);
-  }
-  return(*result);
-}
-
-/* Wrapper function takes care of calling the RPC procedure */
-
-int mult( CLIENT *clnt, int x, int y) {
-  operands ops;
-  int *result;
-
-  /* Gather everything into a single data structure to send to the server */
-  ops.x = x;
-  ops.y = y;
-
-  /* Call the client stub created by rpcgen */
-  result = mult_1(&ops,clnt);
-  if (result==NULL) {
-    fprintf(stderr,"Trouble calling remote procedure\n");
-    exit(0);
-  }
-  return(*result);
-}
-
-/* Wrapper function takes care of calling the RPC procedure */
-
-float divi( CLIENT *clnt, int x, int y) {
-  operands ops;
-  float *result;
-
-  /* Gather everything into a single data structure to send to the server */
-  ops.x = x;
-  ops.y = y;
-
-  /* Call the client stub created by rpcgen */
-  result = div_1(&ops,clnt);
-  if (result==NULL) {
-    fprintf(stderr,"Trouble calling remote procedure\n");
-    exit(0);
-  }
-  return(*result);
-}
-
-int main( int argc, char *argv[]) {
-  CLIENT *clnt;
-  int x,y;
-  if (argc!=4) {
-    fprintf(stderr,"Usage: %s hostname num1 num\n",argv[0]);
-    exit(0);
-  }
-
-  /* Create a CLIENT data structure that reference the RPC
-     procedure SIMP_PROG, version SIMP_VERSION running on the
-     host specified by the 1st command line arg. */
-
-  clnt = clnt_create(argv[1], SIMP_PROG, SIMP_VERSION, "udp");
-
-  /* Make sure the create worked */
-  if (clnt == (CLIENT *) NULL) {
-    clnt_pcreateerror(argv[1]);
-    exit(1);
-  }
-
-  /* get the 2 numbers that should be added */
-  x = atoi(argv[2]);
-  y = atoi(argv[3]);
-
-
-  printf("%d + %d = %d\n",x,y, add(clnt,x,y));
-  printf("%d - %d = %d\n",x,y, sub(clnt,x,y));
-
-  printf("%d * %d = %d\n",x,y, mult(clnt,x,y));
-  printf("%d / %d = %f\n",x,y, divi(clnt,x,y));
-
-  return(0);
+    clnt_destroy(cliente);
+    return 0;
 }
